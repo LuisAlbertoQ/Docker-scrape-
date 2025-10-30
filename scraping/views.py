@@ -7,6 +7,8 @@ from .models import Noticia
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.core.management import call_command
+from .tasks import scrape_all_sections, run_single_scrape
+from celery.result import AsyncResult
 
 # Función helper mejorada para manejar lógica común de listas de noticias
 def lista_noticias_helper(request, queryset_base, template_name, nav_type='comercio'):
@@ -171,26 +173,35 @@ def peru21l(request):
     return lista_noticias_helper(request, queryset, 'peru21/peru21l.html', nav_type='peru21')
 
 # ===== VISTAS DE SCRAPING =====
-def ejecutar_scraping_generico(request, command_name):
-    """Vista genérica para ejecutar comandos de scraping"""
+def ejecutar_scraping_generico(request, command_name=None):
+    """Ejecuta scraping de manera asíncrona usando Celery"""
     if request.method == "POST":
-        buffer = io.StringIO()
         try:
-            call_command(command_name, stdout=buffer)
-            output = buffer.getvalue()
+            # Si se pasa un comando específico
+            if command_name:
+                if command_name:
+                    task = run_single_scrape.delay(command_name)
+                    message = f"Tarea '{command_name}' enviada a Celery"
+            else:
+                # Ejecuta todas las secciones a la vez (la tarea ya existe)
+                task = scrape_all_sections.delay()
+                message = "Tarea global de scraping enviada a Celery"
+
             return JsonResponse({
-                "status": "ok", 
-                "log": output,
-                "message": "Scraping completado exitosamente"
+                "status": "ok",
+                "task_id": task.id,
+                "message": message
             })
+
         except Exception as e:
             return JsonResponse({
-                "status": "error", 
+                "status": "error",
                 "error": str(e),
-                "message": f"Error al ejecutar scraping: {str(e)}"
+                "message": f"Error al enviar la tarea Celery: {str(e)}"
             }, status=500)
+
     return JsonResponse({
-        "status": "error", 
+        "status": "error",
         "error": "Método no permitido",
         "message": "Solo se permiten peticiones POST"
     }, status=405)
@@ -254,3 +265,38 @@ def estadisticas_noticias(request):
         'ultimo_mes': mes,
         'origen': origen
     })
+
+def ver_estado_tarea(request, task_id):
+    """Ver el estado de una tarea Celery con mejor manejo"""
+    try:
+        task_result = AsyncResult(task_id)
+        
+        response_data = {
+            'task_id': task_id,
+            'status': task_result.status,
+            'ready': task_result.ready(),
+        }
+        
+        if task_result.ready():
+            if task_result.successful():
+                response_data['result'] = task_result.result
+                response_data['completed'] = True
+            else:
+                response_data['result'] = str(task_result.result)
+                response_data['completed'] = True
+                response_data['failed'] = True
+        else:
+            # Tarea aún en progreso
+            response_data['completed'] = False
+            if task_result.state == 'PROGRESS' and task_result.info:
+                # Si la tarea reporta progreso
+                response_data['progress'] = task_result.info
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'ERROR',
+            'error': str(e),
+            'completed': False
+        }, status=500)

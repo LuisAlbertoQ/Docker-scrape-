@@ -23,4 +23,5 @@ urlpatterns = [
     path('scraping/peru21/investigacion', views.ejecutar_scraping_peru21_investigacion, name='scraping_peru21_investigacion'),
     path('peru21/lima', views.peru21l, name='peru21l'),
     path('scraping/peru21/lima', views.ejecutar_scraping_peru21_lima, name='scraping_peru21_lima'),
+    path('scraping/task-status/<str:task_id>/', views.ver_estado_tarea, name='task_status'),
 ]
