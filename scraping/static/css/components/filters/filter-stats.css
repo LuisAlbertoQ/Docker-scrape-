@@ -1,0 +1,35 @@
+/* ===== ESTADÍSTICAS DE FILTROS ===== */
+
+.filter-stats {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    background: var(--primary-10);
+    border-radius: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    border: 1px solid var(--primary-20);
+}
+
+.filter-stat-item {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    background: var(--bg-white);
+    border-radius: 15px;
+    transition: var(--transition);
+}
+
+.filter-stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px var(--primary-soft-15);
+}
+
+.filter-stat-item i {
+    color: var(--primary-color);
+    font-size: 0.85rem;
+}

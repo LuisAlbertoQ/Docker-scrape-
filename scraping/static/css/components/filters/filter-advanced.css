@@ -1,0 +1,131 @@
+/* ===== ESTADOS AVANZADOS E INTEGRACIONES ===== */
+
+/* Tooltips para filtros */
+.filter-group[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-color);
+    color: var(--light-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+    box-shadow: var(--shadow-medium);
+}
+
+.filter-group[data-tooltip]:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--secondary-color);
+    margin-bottom: 0;
+}
+
+.filter-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-color);
+    color: var(--light-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.filter-group:hover .filter-tooltip {
+    opacity: 1;
+}
+
+
+/* Estilos para modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .filter-bar {
+        background: var(--secondary-color);
+    }
+    
+    .filter-select,
+    .filter-input {
+        background: var(--dark-primary);
+        color: var(--light-primary);
+        border-color: var(--accent-color);
+    }
+    
+    .filter-label {
+        color: black;
+    }
+    
+    .filter-stats {
+        background: rgba(40, 60, 139, 0.2);
+    }
+}
+
+/* Print styles - ocultar filtros al imprimir */
+@media print {
+    .filter-bar {
+        display: none;
+    }
+}
+
+/* Accesibilidad - alto contraste */
+@media (prefers-contrast: high) {
+    .filter-select,
+    .filter-input {
+        border-width: 2px;
+    }
+    
+    .filter-btn {
+        border-width: 2px;
+    }
+    
+    .filter-tag {
+        border: 2px solid var(--text-color);
+    }
+}
+
+/* Reducir movimiento para usuarios que lo prefieran */
+@media (prefers-reduced-motion: reduce) {
+    .filter-select,
+    .filter-input,
+    .filter-btn,
+    .filter-tag,
+    .refresh-btn,
+    .filter-stat-item {
+        transition: none;
+        animation: none;
+    }
+    
+    .refresh-btn:hover i.fa-sync-alt {
+        transform: none;
+    }
+    
+    .filter-bar .filter-container > * {
+        animation: none;
+        opacity: 1;
+    }
+    
+    .filter-tag {
+        animation: none;
+    }
+    
+    .filter-tag.removing {
+        animation: none;
+    }
+    
+    .filter-count-badge {
+        animation: none;
+    }
+}

@@ -1,0 +1,247 @@
+/* ===== CARDS DE NOTICIAS ===== */
+.news-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    height: auto;
+    min-height: 0;
+}
+
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+.news-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.news-card:hover::before {
+    opacity: 1;
+}
+
+/* Imágenes */
+.image-container {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, var(--light-primary), #85c1e9);
+    flex-shrink: 0;
+    /* Usar aspect-ratio para que la imagen escale proporcionalmente en mobile */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+}
+
+.news-card.large .image-container {
+    /* Ajuste razonable para pantallas de escritorio/tabla: altura menor y sin límite máximo que la restrinja */
+    height: 420px;
+    max-height: none; /* asegurar que esta altura tenga efecto aunque exista un max-height genérico */
+}
+
+.news-card.medium .image-container {
+    height: 280px;
+}
+
+.news-card.small .image-container,
+.news-card .image-container {
+    height: 180px;
+}
+
+.news-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center; /* centrar la porción visible de la imagen */
+    transition: transform 0.5s ease;
+}
+
+.news-card:hover .news-image {
+    transform: scale(1.08);
+}
+
+/* Regla más específica para asegurar comportamiento en pantallas de escritorio
+   y prevenir que archivos legacy sobrescriban la altura o el centrado */
+.news-grid .news-card.large .image-container {
+    height: 420px;
+    max-height: none;
+}
+
+.news-grid .news-card.large .image-container .news-image {
+    object-position: center center;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-primary);
+    font-size: 3rem;
+    background: linear-gradient(45deg, var(--bg-light), var(--light-primary));
+}
+
+/* Responsive: en pantallas pequeñas eliminamos alturas fijas para evitar
+   que las imágenes grandes se vean estiradas. Usamos aspect-ratio para
+   mantener proporción y permitir que las tarjetas reduzcan su altura
+   proporcionalmente al ancho del dispositivo. */
+@media (max-width: 768px) {
+    .news-card.large .image-container,
+    .news-card.medium .image-container,
+    .news-card.small .image-container,
+    .news-card .image-container {
+        height: auto;
+        aspect-ratio: 16 / 9;
+        max-height: none;
+    }
+
+    /* Asegurar que cualquier regla más específica aplicada en desktop se
+       anule en mobile */
+    .news-grid .news-card.large .image-container {
+        height: auto;
+    }
+
+    /* Fallback para navegadores que no manejan 'aspect-ratio' correctamente:
+       usamos el truco del padding-top (ratio box) y posicionamos la imagen
+       absolutamente dentro del contenedor para mantener proporción sin estirar. */
+    .news-card .image-container {
+        position: relative;
+    }
+
+    .news-card .image-container::before {
+        content: '';
+        display: block;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 */
+        pointer-events: none;
+    }
+
+    .news-card .image-container .news-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+    }
+}
+
+/* Contenido */
+.card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: 10px;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-footer {
+    margin-top: 10px;
+    border-top: 1px solid rgba(52, 152, 219, 0.1);
+    padding-top: 10px;
+}
+
+.card-content > *:not(.news-actions) {
+    flex-shrink: 0;
+}
+
+.card-content > .news-actions {
+    margin-top: auto;
+}
+
+/* Títulos */
+.news-title {
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.3;
+    transition: var(--transition);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0;
+    font-size: 1.1rem;
+}
+
+.news-card.large .news-title {
+    font-size: 1.6rem;
+}
+
+.news-card.medium .news-title {
+    font-size: 1.4rem;
+}
+
+.news-card.small .news-title,
+.news-card .news-title {
+    font-size: 1.2rem;
+}
+
+.news-title:hover {
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+/* Meta información */
+.news-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding-top: 8px;
+    border-top: 1px solid #ecf0f1;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 15px;
+    transition: var(--transition);
+}
+
+.meta-item:hover {
+    background: rgba(52, 152, 219, 0.2);
+    transform: translateY(-1px);
+}
+
+.meta-item i {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+/* Acciones */
+.news-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding-top: 10px;
+    margin-top: auto;
+}

@@ -1,0 +1,50 @@
+# Archivos y carpetas que deben ser ignorados por git
+# Entorno virtual de Python
+env/
+
+# Archivos de configuración y dependencias
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Archivos de log
+*.log
+
+# Archivos de base de datos
+*.sqlite3
+
+# Archivos de migraciones
+scraping/migrations/*.pyc
+scraping/migrations/__pycache__/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de VSCode
+.vscode/
+
+# Archivos de dependencias
+*.egg-info/
+
+# Archivos estáticos generados
+scraping/static/css/*.map
+scraping/static/js/*.map
+
+# Archivos temporales
+*.tmp
+*.swp
+*.bak
+
+# Otros
+node_modules/
+
+# Redis dump
+dump.rdb
+
+# Celery Beat schedule
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+celerybeat-schedule-hash

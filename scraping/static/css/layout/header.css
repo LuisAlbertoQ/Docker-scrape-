@@ -1,0 +1,81 @@
+/* ===== HEADER ===== */
+.header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 20px 0 10px;
+    box-shadow: var(--shadow-medium);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    
+    /* Compatibilidad con Safari */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    justify-content: center;
+}
+
+.logo i {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+}
+
+.logo h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #ffffff, #ecf0f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(121, 192, 239, 0.3);
+}
+
+/* Estadísticas */
+.stats {
+    display: flex;
+    gap: 30px;
+    color: #bdc3c7;
+    font-size: 0.95rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.stats div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    
+    /* Compatibilidad con Safari */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats div:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(84, 168, 223, 0.2);
+}

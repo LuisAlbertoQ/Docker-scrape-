@@ -1,0 +1,223 @@
+/* ===== INPUTS Y SELECTS DE FILTROS ===== */
+
+/* Select de filtros */
+.filter-select {
+    padding: 12px 16px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    background: var(--bg-white);
+    font-size: 0.95rem;
+    min-width: 180px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-color);
+    font-weight: 500;
+    outline: none;
+    appearance: none;
+    /* icono SVG del select: color actualizado para usar la variable --primary-soft (azul suave) */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235dade2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.filter-select:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 3px 10px var(--primary-soft-15);
+    background-color: var(--primary-soft-05);
+}
+
+.filter-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-soft-20);
+    background-color: var(--bg-white);
+}
+
+.filter-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Input de texto para búsqueda */
+.filter-input {
+    padding: 12px 16px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    background: var(--bg-white);
+    font-size: 0.95rem;
+    min-width: 200px;
+    cursor: text;
+    transition: var(--transition);
+    color: var(--text-color);
+    font-weight: 500;
+    outline: none;
+}
+
+.filter-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.filter-input[name="q"]::placeholder {
+    font-style: italic;
+}
+
+.filter-input:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 3px 10px var(--primary-soft-15);
+    background-color: var(--primary-soft-05);
+}
+
+.filter-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(187, 213, 244, 0.2);
+    background-color: var(--bg-white);
+}
+
+.filter-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--primary-soft-05);
+}
+
+/* Estados de validación */
+.filter-input:invalid {
+    border-color: #e74c3c;
+}
+
+.filter-input:valid {
+    border-color: var(--primary-color);
+}
+
+.filter-input:invalid:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+/* Contenedor de rango de fechas */
+.date-range-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-range-container > span {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* Wrapper para inputs de fecha con icono */
+.date-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.date-input-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: var(--primary-color);
+    pointer-events: none;
+    font-size: 0.9rem;
+}
+
+.filter-input[type="date"] {
+    padding-left: 38px;
+    min-width: 160px;
+}
+
+/* Personalización del calendario nativo */
+.filter-input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 4px;
+    transition: var(--transition);
+}
+
+.filter-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    background-color: var(--primary-soft-20);
+}
+
+.filter-input[type="date"]:disabled {
+    background: var(--primary-soft-05);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Mensaje de error de validación */
+.filter-error-message {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+    font-weight: 500;
+}
+
+.filter-group.has-error .filter-error-message {
+    display: block;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Focus visible para accesibilidad */
+.filter-select:focus-visible,
+.filter-input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Estilos para dropdown de autocompletado */
+.filter-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-white);
+    border: 1px solid var(--primary-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    box-shadow: var(--shadow-medium);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: -1px;
+}
+
+.filter-autocomplete-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.filter-autocomplete-item:hover,
+.filter-autocomplete-item.selected {
+    background: var(--primary-soft-10);
+}
+
+.filter-autocomplete-item:active {
+    background: var(--primary-soft-20);
+}
+
+/* Scrollbar personalizada para el autocomplete */
+.filter-autocomplete::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filter-autocomplete::-webkit-scrollbar-track {
+    background: var(--bg-light);
+}
+
+.filter-autocomplete::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.filter-autocomplete::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}

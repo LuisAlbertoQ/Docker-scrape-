@@ -1,0 +1,34 @@
+/* ===== ARCHIVO PRINCIPAL - IMPORTACIONES ===== */
+/* Importa todos los módulos CSS en el orden correcto */
+
+/* Base */
+@import 'base/variables.css';
+@import 'base/reset.css';
+@import 'base/animations.css';
+
+/* Layout */
+@import 'layout/header.css';
+@import 'layout/navigation.css';
+@import 'layout/container.css';
+
+/* Components */
+@import 'components/cards.css';
+@import 'components/buttons.css';
+
+/* Filters (módulo completo) */
+@import 'components/filters/filter-base.css';
+@import 'components/filters/filter-inputs.css';
+@import 'components/filters/filter-actions.css';
+@import 'components/filters/filter-tags.css';
+@import 'components/filters/filter-stats.css';
+@import 'components/filters/filter-responsive.css';
+@import 'components/filters/filter-advanced.css';
+
+@import 'components/pagination.css';
+@import 'components/states.css';
+
+/* Responsive (debe ir al final) */
+@import 'layout/responsive.css';
+
+/* Utils (opcional) */
+@import 'utils/helpers.css';

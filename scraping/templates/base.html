@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Noticias El Comercio - Portal de Noticias{% endblock %}</title>
+    
+    <!-- CSS externos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'css/filtros.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'css/filtros-ajustes.css' %}?v=1">-->
+    
+    <!-- CSS de filtros (debe estar en tu archivo noticias.css) -->
+    <!--<link rel="stylesheet" href="{% static 'css/filtros.css' %}">-->
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% csrf_token %}
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="{% block header_icon %}fas fa-newspaper{% endblock %}"></i>
+                <h1>{% block header_title %}El Comercio{% endblock %}</h1>
+            </div>
+            <div class="stats">
+                <div><i class="fas fa-newspaper"></i> {{ total_noticias|default:noticias.paginator.count }} noticias</div>
+                <div><i class="fas fa-clock"></i> Actualizado hoy</div>
+                <div><i class="fas fa-users"></i> Portal de Noticias</div>
+            </div>
+    </div>
+    </div>
+    </header>
+    {% include 'includes/nav.html' %}
+
+    <div class="container">
+        <!-- Sistema de filtros mejorado -->
+        <div class="site-filter-area">
+        <div class="filter-bar">
+            <form method="GET" id="filter-form">
+                <div class="filter-container">
+                    <!-- Filtro por fecha predefinida -->
+                    <div class="filter-group">
+                        <label for="fecha-select" class="filter-label">
+                            <i class="fas fa-calendar-alt"></i> Período
+                        </label>
+                        <select name="fecha" class="filter-select" id="fecha-select">
+                            <option value="todas" {% if not filtro_actual.fecha or filtro_actual.fecha == 'todas' %}selected{% endif %}>Todas las fechas</option>
+                            <option value="hoy" {% if filtro_actual.fecha == 'hoy' %}selected{% endif %}>Hoy</option>
+                            <option value="ayer" {% if filtro_actual.fecha == 'ayer' %}selected{% endif %}>Ayer</option>
+                            <option value="semana" {% if filtro_actual.fecha == 'semana' %}selected{% endif %}>Última semana</option>
+                            <option value="mes" {% if filtro_actual.fecha == 'mes' %}selected{% endif %}>Último mes</option>
+                            <option value="rango" {% if filtro_actual.fecha == 'rango' %}selected{% endif %}>Rango personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Rango de fechas personalizado (se muestra cuando se selecciona 'rango') -->
+                    <fieldset class="filter-group" id="date-range-group" style="display: none;">
+                        <legend class="filter-label">
+                            <i class="fas fa-calendar-week"></i> Desde - Hasta
+                        </legend>
+                        <div class="date-range-container">
+                            <div class="date-input-wrapper">
+                                <i class="fas fa-calendar"></i>
+                                <input type="date" name="fecha_desde" class="filter-input" 
+                                    value="{{ request.GET.fecha_desde }}" 
+                                    max="{{ today|date:'Y-m-d' }}"
+                                    aria-label="Fecha desde">
+                            </div>
+                            <span class="filter-separator">—</span>
+                            <div class="date-input-wrapper">
+                                <i class="fas fa-calendar"></i>
+                                <input type="date" name="fecha_hasta" class="filter-input" 
+                                    value="{{ request.GET.fecha_hasta }}" 
+                                    max="{{ today|date:'Y-m-d' }}"
+                                    aria-label="Fecha hasta">
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <!-- Filtro por imagen -->
+                    <div class="filter-group">
+                        <label for="con_imagen" class="filter-label">
+                            <i class="fas fa-image"></i> Imágenes
+                        </label>
+                        <select name="con_imagen" class="filter-select" id="con_imagen">
+                            <option value="" {% if not filtro_actual.imagen %}selected{% endif %}>Todas</option>
+                            <option value="1" {% if filtro_actual.imagen %}selected{% endif %}>Solo con imágenes</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Búsqueda -->
+                    <div class="filter-group">
+                        <label for="busqueda" class="filter-label">
+                            <i class="fas fa-search"></i> Buscar
+                        </label>
+                        <input type="text"
+                               id="busqueda" 
+                               name="q" 
+                               class="filter-input" 
+                               placeholder="Buscar noticias..." 
+                               value="{{ filtro_actual.busqueda }}">
+                    </div>
+                    
+                    <!-- Mantener per_page -->
+                    <input type="hidden" name="per_page" value="{{ request.GET.per_page|default:'10' }}">
+                    
+                    <!-- Acciones -->
+                    <div class="filter-actions">
+                        <button type="submit" class="filter-btn filter-btn-apply">
+                            <i class="fas fa-filter"></i> Aplicar
+                        </button>
+                        <button type="button" class="filter-btn filter-btn-clear" onclick="clearFilters()">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Estadísticas de filtros -->
+                <div class="filter-stats">
+                    <div class="filter-stat-item">
+                        <i class="fas fa-list"></i>
+                        <span>{{ total_noticias|default:noticias.paginator.count }} resultado{{ total_noticias|default:noticias.paginator.count|pluralize }}</span>
+                    </div>
+                    <div class="filter-stat-item">
+                        <i class="fas fa-image"></i>
+                        <span>{{ noticias_con_imagen|default:0 }} con imagen</span>
+                    </div>
+                    {% if filtro_actual.fecha and filtro_actual.fecha != 'todas' %}
+                    <div class="filter-stat-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Filtrado por: {{ filtro_actual.fecha|title }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+            
+            <!-- Tags de filtros activos -->
+                {% if filtro_actual.fecha and filtro_actual.fecha != 'todas' or filtro_actual.imagen or filtro_actual.busqueda %}
+            <div class="active-filters">
+                <span class="active-filters-label">Filtros activos:</span>
+                
+                {% if filtro_actual.fecha and filtro_actual.fecha != 'todas' %}
+                <div class="filter-tag">
+                    <i class="fas fa-calendar"></i>
+                    <span>{{ filtro_actual.fecha|title }}</span>
+                    <button class="filter-tag-close" onclick="removeFilter('fecha')">&times;</button>
+                </div>
+                {% endif %}
+                
+                {% if filtro_actual.imagen %}
+                <div class="filter-tag">
+                    <i class="fas fa-image"></i>
+                    <span>Con imágenes</span>
+                    <button class="filter-tag-close" onclick="removeFilter('con_imagen')">&times;</button>
+                </div>
+                {% endif %}
+                
+                {% if filtro_actual.busqueda %}
+                <div class="filter-tag">
+                    <i class="fas fa-search"></i>
+                    <span>"{{ filtro_actual.busqueda }}"</span>
+                    <button class="filter-tag-close" onclick="removeFilter('q')">&times;</button>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Botones adicionales -->
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="refresh-btn" onclick="window.location.reload()">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+                <button class="refresh-btn" id="{% block scraping_btn_id %}scraping-btn{% endblock %}">
+                    <i class="fas fa-robot"></i> Scraping
+                </button>
+            </div>
+        </div>
+
+        {% if noticias %}
+            <div class="news-grid">
+                {% for noticia in noticias %}
+                <article class="news-card fade-in" style="animation-delay: {{ forloop.counter0|add:1|floatformat:1 }}s">
+                    <div class="image-container">
+                        {% if noticia.imagen %}
+                            <img src="{{ noticia.imagen }}"
+                                 alt="{{ noticia.titulo }}"
+                                 class="news-image"
+                                 loading="lazy"
+                                 onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'><i class=\'fas fa-image\'></i></div>'">
+                        {% else %}
+                            <div class="image-placeholder"><i class="fas fa-image"></i></div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-content">
+                        <h2 class="news-title">{{ noticia.titulo }}</h2>
+
+                        <div class="news-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span>{{ noticia.autor|default:"Redacción" }}</span>
+                            </div>
+                            {% if noticia.fecha %}
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ noticia.fecha|date:"d/m/Y H:i" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="news-actions">
+                            {% if noticia.enlace %}
+                                <a href="{{ noticia.enlace }}" target="_blank" class="read-more">
+                                    Leer más <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            {% else %}
+                                <a href="#" class="read-more" onclick="alert('Enlace no disponible'); return false;">
+                                    Ver noticia <i class="fas fa-eye"></i>
+                                </a>
+                            {% endif %}
+
+                            <button class="share-btn"
+                                    onclick="compartirNoticia('{{ noticia.titulo|escapejs }}', '{{ noticia.enlace|default:''|escapejs }}')"
+                                    aria-label="Compartir: {{ noticia.titulo }}">
+                                <i class="fas fa-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Controles de paginación -->
+            <div class="pagination-controls">
+                <!-- Selector de elementos por página -->
+                <div class="per-page-selector">
+                    <label for="per-page">Mostrar:</label>
+                    <select id="per-page" class="per-page-select">
+                        <option value="10" {% if request.GET.per_page == '10' or not request.GET.per_page %}selected{% endif %}>10</option>
+                        <option value="20" {% if request.GET.per_page == '20' %}selected{% endif %}>20</option>
+                        <option value="50" {% if request.GET.per_page == '50' %}selected{% endif %}>50</option>
+                    </select>
+                    <span>por página</span>
+                </div>
+
+                <!-- Paginación tradicional -->
+                <div class="pagination">
+                    {% if noticias.has_previous %}
+                        <a href="?page={{ noticias.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&laquo; Anterior</a>
+                    {% endif %}
+
+                    {% for num in noticias.paginator.page_range %}
+                        {% if num == noticias.number %}
+                            <span class="current-page">{{ num }}</span>
+                        {% elif num > noticias.number|add:'-3' and num < noticias.number|add:'3' %}
+                            <a href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if noticias.has_next %}
+                        <a href="?page={{ noticias.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">Siguiente &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="no-news">
+                <i class="fas fa-newspaper"></i>
+                <h2>No hay noticias disponibles</h2>
+                <p>{% if filtro_actual.fecha or filtro_actual.imagen or filtro_actual.busqueda %}
+                    No se encontraron noticias con los filtros aplicados. Intenta con otros criterios.
+                {% else %}
+                    Ejecuta el comando de scraping para obtener las últimas noticias.
+                {% endif %}</p>
+                <button class="refresh-btn" onclick="clearFilters()" style="margin-top:20px">
+                    <i class="fas fa-times"></i> Limpiar filtros
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- JS propio -->
+    <script src="{% static 'js/noticias.js' %}" defer></script>
+    
+    <script>
+        // Funciones específicas para filtros
+        function clearFilters() {
+            const url = new URL(window.location);
+            url.search = '';
+            window.location.href = url.toString();
+        }
+        
+        function removeFilter(filterName) {
+            const url = new URL(window.location);
+            url.searchParams.delete(filterName);
+            if (filterName === 'fecha') {
+                url.searchParams.delete('fecha_desde');
+                url.searchParams.delete('fecha_hasta');
+            }
+            window.location.href = url.toString();
+        }
+        
+        // Mostrar/ocultar rango de fechas con comprobaciones de existencia
+        (function () {
+            const fechaSelect = document.getElementById('fecha-select');
+            const dateRangeGroup = document.getElementById('date-range-group');
+
+            if (!fechaSelect) return;
+
+            fechaSelect.addEventListener('change', function() {
+                if (!dateRangeGroup) return;
+                if (this.value === 'rango') {
+                    dateRangeGroup.style.display = 'block';
+                } else {
+                    dateRangeGroup.style.display = 'none';
+                }
+            });
+
+            // Inicializar en carga si ya está en modo rango
+            if (dateRangeGroup && fechaSelect.value === 'rango') {
+                dateRangeGroup.style.display = 'block';
+            }
+        })();
+    </script>
+    <script src="{% static 'js/filter-bar-init.js' %}" defer></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

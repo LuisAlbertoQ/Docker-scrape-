@@ -1,0 +1,39 @@
+<nav class="main-nav">
+    <div class="nav-wrapper">
+        {% if nav_type == 'peru21' %}
+            <!-- Navegación para Perú21 -->
+            <a href="{% url 'peru21' %}" class="nav-link {% if request.resolver_match.url_name == 'peru21' %}active{% endif %}">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="{% url 'peru21d' %}" class="nav-link {% if request.resolver_match.url_name == 'deportes' %}active{% endif %}">
+                <i class="fas fa-futbol"></i> Deportes
+            </a>
+            <a href="{% url 'peru21g' %}" class="nav-link {% if request.resolver_match.url_name == 'gastronomia' %}active{% endif %}">
+                <i class="fas fa-drumstick-bite"></i> Gastronomía
+            </a>
+            <a href="{% url 'peru21i' %}" class="nav-link {% if request.resolver_match.url_name == 'investigacion' %}active{% endif %}">
+                <i class="fas fa-flask"></i> Investigación
+            </a>
+            <a href="{% url 'peru21l' %}" class="nav-link {% if request.resolver_match.url_name == 'lima' %}active{% endif %}">
+                <i class="fas fa-fire"></i> Lima
+            </a>
+        {% else %}
+            <!-- Navegación para El Comercio (default) -->
+            <a href="{% url 'lista_noticias' %}" class="nav-link {% if request.resolver_match.url_name == 'lista' %}active{% endif %}">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="{% url 'politica' %}" class="nav-link {% if request.resolver_match.url_name == 'politica' %}active{% endif %}">
+                <i class="fas fa-landmark"></i> Política
+            </a>
+            <a href="{% url 'economia' %}" class="nav-link {% if request.resolver_match.url_name == 'economia' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i> Economía
+            </a>
+            <a href="{% url 'mundo' %}" class="nav-link {% if request.resolver_match.url_name == 'mundo' %}active{% endif %}">
+                <i class="fas fa-globe"></i> Mundo
+            </a>
+            <a href="{% url 'tecnologia' %}" class="nav-link {% if request.resolver_match.url_name == 'tecnologia' %}active{% endif %}">
+                <i class="fas fa-microchip"></i> Tecnología
+            </a>
+        {% endif %}
+    </div>
+</nav>

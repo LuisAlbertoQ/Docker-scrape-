@@ -1,0 +1,135 @@
+/* ===== RESPONSIVE PARA FILTROS ===== */
+
+@media (max-width: 1024px) {
+    .filter-container {
+        gap: 12px;
+    }
+    
+    .filter-group {
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-bar {
+        padding: 20px;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .filter-select,
+    .filter-input {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .date-range-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .date-input-wrapper {
+        width: 100%;
+    }
+    
+    .filter-input[type="date"] {
+        width: 100%;
+    }
+    
+    .filter-actions {
+        width: 100%;
+        margin-left: 0;
+        flex-direction: column;
+    }
+    
+    .filter-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .filter-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .filter-stat-item {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .active-filters {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .active-filters > span {
+        width: 100%;
+    }
+    
+    .filter-tag {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    /* Responsive adicional para botones dentro del filter-bar */
+    .filter-bar > .filter-actions:last-child {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .filter-bar .refresh-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-bar {
+        padding: 15px;
+    }
+    
+    .filter-label {
+        font-size: 0.8rem;
+    }
+    
+    .filter-select,
+    .filter-input {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+    }
+    
+    .filter-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .filter-stats {
+        padding: 12px 15px;
+    }
+    
+    .filter-stat-item {
+        font-size: 0.85rem;
+        padding: 4px 10px;
+    }
+    
+    .filter-tag {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .filter-bar > .filter-actions:last-child {
+        flex-direction: column;
+    }
+    
+    .filter-bar .refresh-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

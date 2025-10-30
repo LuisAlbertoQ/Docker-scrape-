@@ -1,0 +1,155 @@
+/* ===== ESTRUCTURA BASE DE FILTROS ===== */
+
+/* Contenedor principal de filtros */
+.filter-bar {
+    background: var(--bg-white);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--primary-soft-20);
+}
+
+/* Mejora visual cuando se hace hover sobre el contenedor completo */
+.filter-bar:hover {
+    box-shadow: var(--shadow-heavy);
+    border-color: var(--primary-soft-40);
+}
+
+/* Indicador visual cuando hay filtros aplicados */
+.filter-bar.has-active-filters {
+    border-color: var(--accent-color);
+    box-shadow: 0 5px 20px var(--primary-soft-25);
+}
+
+/* Contenedor del formulario de filtros */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+/* Animación de entrada para elementos del contenedor */
+.filter-bar .filter-container > * {
+    animation: fadeInUp 0.3s ease forwards;
+    opacity: 0;
+}
+
+.filter-bar .filter-container > *:nth-child(1) { animation-delay: 0.05s; }
+.filter-bar .filter-container > *:nth-child(2) { animation-delay: 0.1s; }
+.filter-bar .filter-container > *:nth-child(3) { animation-delay: 0.15s; }
+.filter-bar .filter-container > *:nth-child(4) { animation-delay: 0.2s; }
+.filter-bar .filter-container > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* Asegurar que los filtros no afecten la barra original de filtros simples */
+.filter-bar.filter-bar--no-container {
+    background: var(--bg-white);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid var(--primary-soft-20);
+}
+
+.filter-bar.filter-bar--no-container .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    padding: 10px 15px;
+    background: var(--primary-soft-10);
+    border-radius: 20px;
+    transition: var(--transition);
+}
+
+.filter-bar.filter-bar--no-container .filter-item:hover {
+    background: var(--primary-soft-20);
+    transform: translateY(-2px);
+}
+
+.filter-bar.filter-bar--no-container .filter-item i {
+    color: var(--primary-color);
+}
+
+/* Grupo de filtro individual */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 180px;
+    position: relative;
+}
+
+/* Etiqueta del filtro */
+.filter-label {
+    color: black;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-label i {
+    color: black;
+    font-size: 0.9rem;
+}
+
+/* Separador visual entre secciones de filtros */
+.filter-divider {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--primary-color), transparent);
+    margin: 0 10px;
+}
+
+/* Efecto de enfoque suave en todo el formulario */
+.filter-bar form {
+    width: 100%;
+}
+
+.filter-bar form:focus-within {
+    outline: none;
+}
+
+/* Nota: las reglas específicas para forzar tema claro se encuentran en
+   .site-filter-area .filter-bar - usamos ese scope para evitar !important. */
+
+/* Texto y separadores usados en la barra de filtros */
+.filter-separator {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.active-filters-label {
+    color: var(--text-color);
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+/* Override adicional con mayor especificidad y !important para evitar que
+   reglas legacy o media queries dark mode cambien el fondo de la barra de filtros. */
+.site-filter-area .filter-bar {
+    background: var(--bg-white);
+    color: var(--text-color);
+    border-color: var(--primary-soft-20);
+    box-shadow: var(--shadow-medium);
+}
+
+.site-filter-area .filter-bar .filter-select,
+.site-filter-area .filter-bar .filter-input {
+    background: var(--bg-white);
+    color: var(--text-color);
+    border-color: var(--primary-soft-20);
+}
+
+.site-filter-area .filter-bar .filter-stats {
+    background: var(--primary-10);
+}

@@ -1,0 +1,32 @@
+/* ===== CONTAINER Y GRID ===== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Grid dinámico con diferentes tamaños de cards */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: auto;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: start;
+}
+
+/* Clases para diferentes tamaños de cards */
+.news-card.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.news-card.medium {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.news-card.small {
+    grid-column: span 1;
+    grid-row: span 1;
+}

@@ -1,0 +1,48 @@
+/* ===== VARIABLES CSS - COLORES Y TOKENS DE DISEÑO ===== */
+:root {
+    /* Colores principales */
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    
+    /* Colores de texto */
+    --text-color: #2c3e50;
+    --text-muted: #7f8c8d;
+    
+    /* Colores de fondo */
+    --bg-light: #fbfdff; /* un poco más claro */
+    --bg-white: #ffffff;
+    
+    /* Gradientes */
+    --primary-gradient: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #1abc9c 100%);
+    
+    /* Variantes de colores */
+    --dark-primary: #2980b9;
+    --light-primary: #85c1e9;
+    /* Tonos suaves secundarios que combinan con --primary-color */
+    /* Renombrado: anteriormente se llamaban --gold*; ahora --primary-soft* para mayor claridad semántica */
+    --primary-soft: #7fbbe9; /* azul m1s suave */
+    --primary-soft-05: rgba(127, 187, 233, 0.04);
+    --primary-soft-10: rgba(127, 187, 233, 0.08);
+    --primary-soft-15: rgba(127, 187, 233, 0.12);
+    --primary-soft-20: rgba(127, 187, 233, 0.16);
+    --primary-soft-25: rgba(127, 187, 233, 0.20);
+    --primary-soft-30: rgba(127, 187, 233, 0.26);
+    --primary-soft-40: rgba(127, 187, 233, 0.36);
+    --primary-soft-dark-30: rgba(41, 128, 185, 0.18);
+
+    /* Variantes translúcidas del primary / accent usadas en filtros */
+    --primary-10: rgba(52, 152, 219, 0.1);
+    --primary-20: rgba(52, 152, 219, 0.2);
+    --accent-20: rgba(231, 76, 60, 0.2);
+    
+    /* Sombras */
+    --shadow-light: 0 5px 15px rgba(52, 152, 219, 0.1);
+    --shadow-medium: 0 10px 30px rgba(52, 152, 219, 0.15);
+    --shadow-heavy: 0 20px 40px rgba(52, 152, 219, 0.2);
+    
+    /* Diseño */
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
